@@ -70,6 +70,16 @@ If the key is missing or the call fails, the endpoint returns a rule-based answe
 - **Supabase configured but you have no data yet** → the dashboard shows the Demo Store until you import your own orders ("Demo Store" badge). Hide it in Settings → Data.
 - **No OpenAI key** → demo AI answers (see above).
 
+## Test access
+
+**Fastest (no accounts, no keys):**
+```bash
+npm install && npm run dev
+```
+Open http://localhost:3000 → **Start for free** → **Continue to demo**. You land on the Demo Store dashboard. Try: change the date range/currency, open an order, add a product, import the CSV template from the Import page, and click **Ask AI**.
+
+**Live test with real login:** create a free Supabase project, run the migration, put the URL and anon key in `.env.local`, restart, then sign up at `/signup` (disable "Confirm email" in Supabase for instant access). Add `OPENAI_API_KEY` for real AI answers.
+
 ## CSV format
 
 | Column | Required | Notes |
@@ -115,7 +125,7 @@ npm test           # calculation engine + CSV validation tests
 
 ## Deployment
 
-**Vercel** (recommended): push the repo, import it in Vercel, add the four environment variables above, deploy. Set the Supabase Site URL / redirect URLs to the production domain. Any Node host that supports Next.js 16 (`npm run build && npm start`) works too.
+**Vercel** (recommended): push the repo, import it in Vercel, add the four environment variables above, deploy. Set the Supabase Site URL to the production domain and add `<domain>/auth/callback` to Redirect URLs (needed for email confirmation and password reset). Any Node host that supports Next.js 16 (`npm run build && npm start`) works too.
 
 ## Security notes
 
@@ -137,6 +147,6 @@ supabase/migrations/0001_init.sql
 
 - Static FX rates; UTC-only day bucketing.
 - Product costs are interpreted in your profile currency.
-- No password reset / email-change UI yet, and no rate limiting on `/api/ai`.
+- No email-change UI. `/api/ai` rate limiting is in-memory (per instance).
 - Orders are loaded in full (up to 20,000) and aggregated in the browser; move aggregation into SQL views/RPCs for very large stores.
 - No direct Amazon/eBay API sync — CSV import only.

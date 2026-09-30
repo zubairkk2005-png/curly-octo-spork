@@ -7,6 +7,7 @@ import { askOpenAI } from "@/lib/ai/openai";
 import { generateDemoOrders } from "@/lib/demo-data";
 import { apiError, fetchOrders, getSession } from "@/lib/data/server";
 import { isOpenAIConfigured, isSupabaseConfigured } from "@/lib/env";
+import { rateLimit } from "@/lib/rate-limit";
 import { orderSchema } from "@/lib/schemas";
 import { CURRENCY_CODES, type Order } from "@/lib/types";
 
@@ -36,8 +37,11 @@ export async function POST(request: Request) {
     if (isSupabaseConfigured()) {
       const session = await getSession();
       if (!session) return apiError("Please sign in again.", 401);
+      if (!rateLimit(`ai:${session.user.id}`)) return apiError("You're asking too quickly. Please wait a moment.", 429);
       orders = await fetchOrders(session.supabase);
     } else {
+      const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
+      if (!rateLimit(`ai:${ip}`, 60)) return apiError("You're asking too quickly. Please wait a moment.", 429);
       orders = body.orders ?? [];
     }
   } catch (err) {

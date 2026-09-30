@@ -4,6 +4,7 @@ import { isSupabaseConfigured } from "@/lib/env";
 
 export const metadata: Metadata = { title: "Log in — ProfitPilot" };
 
-export default function Page() {
-  return <AuthForm mode="login" supabaseConfigured={isSupabaseConfigured()} />;
+export default async function Page({ searchParams }: PageProps<"/login">) {
+  const { error } = await searchParams;
+  return <AuthForm mode="login" supabaseConfigured={isSupabaseConfigured()} linkError={error === "link"} />;
 }

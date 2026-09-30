@@ -13,12 +13,12 @@ const credentials = z.object({
   password: z.string().min(8, "Use at least 8 characters."),
 });
 
-export function AuthForm({ mode, supabaseConfigured }: { mode: "login" | "signup"; supabaseConfigured: boolean }) {
+export function AuthForm({ mode, supabaseConfigured, linkError }: { mode: "login" | "signup"; supabaseConfigured: boolean; linkError?: boolean }) {
   const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(linkError ? "That link is invalid or has expired. Please try again." : null);
   const [notice, setNotice] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const isSignup = mode === "signup";
@@ -40,7 +40,10 @@ export function AuthForm({ mode, supabaseConfigured }: { mode: "login" | "signup
         const { data, error: err } = await supabase.auth.signUp({
           email: parsed.data.email,
           password: parsed.data.password,
-          options: { data: { full_name: fullName.trim().slice(0, 100) } },
+          options: {
+            data: { full_name: fullName.trim().slice(0, 100) },
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
         });
         if (err) throw err;
         if (!data.session) {
@@ -85,7 +88,7 @@ export function AuthForm({ mode, supabaseConfigured }: { mode: "login" | "signup
         {supabaseConfigured && (
           <>
             <div><Label htmlFor="email">Email</Label><Input id="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></div>
-            <div><Label htmlFor="password">Password</Label><Input id="password" type="password" autoComplete={isSignup ? "new-password" : "current-password"} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} /></div>
+            <div><div className="flex items-center justify-between"><Label htmlFor="password">Password</Label>{!isSignup && <Link href="/forgot-password" className="mb-1.5 text-xs text-muted-foreground hover:text-foreground">Forgot password?</Link>}</div><Input id="password" type="password" autoComplete={isSignup ? "new-password" : "current-password"} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} /></div>
           </>
         )}
         {error && <p role="alert" className="text-[13px] text-negative">{error}</p>}
