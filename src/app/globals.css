@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #fafaf9;
+  --foreground: #0c0a09;
+  --card: #ffffff;
+  --muted: #f5f5f4;
+  --muted-foreground: #6b6862;
+  --border: #e7e5e4;
+  --input: #d6d3d1;
+  --primary: #18181b;
+  --primary-foreground: #fafafa;
+  --accent: #f5f5f4;
+  --ring: #2a78d6;
+  --positive: #15803d;
+  --positive-bg: #ecfdf3;
+  --negative: #b91c1c;
+  --negative-bg: #fef2f2;
+  --warning: #a16207;
+  --warning-bg: #fefce8;
+  --chart-revenue: #2a78d6;
+  --chart-profit: #1baf7a;
+  --chart-cost: #a8a29e;
+  --chart-ads: #eb6834;
+  --chart-fees: #eda100;
+  --chart-shipping: #e87ba4;
+  --chart-refunds: #e34948;
+  --chart-orders: #7c6be0;
+  --chart-grid: #ecebe9;
+  color-scheme: light;
+}
+
+.dark {
+  --background: #0b0b0c;
+  --foreground: #f5f5f4;
+  --card: #141415;
+  --muted: #1c1c1e;
+  --muted-foreground: #a3a09a;
+  --border: #262628;
+  --input: #3a3a3d;
+  --primary: #f5f5f4;
+  --primary-foreground: #0c0a09;
+  --accent: #1c1c1e;
+  --ring: #3987e5;
+  --positive: #4ade80;
+  --positive-bg: #0f2a1a;
+  --negative: #f87171;
+  --negative-bg: #2d1414;
+  --warning: #facc15;
+  --warning-bg: #2a2410;
+  --chart-revenue: #3987e5;
+  --chart-profit: #199e70;
+  --chart-cost: #6b6862;
+  --chart-ads: #d95926;
+  --chart-fees: #c98500;
+  --chart-shipping: #d55181;
+  --chart-refunds: #e66767;
+  --chart-orders: #9085e9;
+  --chart-grid: #232325;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-ring: var(--ring);
+  --color-positive: var(--positive);
+  --color-positive-bg: var(--positive-bg);
+  --color-negative: var(--negative);
+  --color-negative-bg: var(--negative-bg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --radius-card: 0.875rem;
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-feature-settings: "cv11", "ss01";
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes pp-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.pp-skeleton {
+  background: linear-gradient(90deg, var(--muted) 25%, var(--border) 50%, var(--muted) 75%);
+  background-size: 200% 100%;
+  animation: pp-shimmer 1.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pp-skeleton { animation: none; }
+}
+
+@keyframes pp-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+.pp-fade-in { animation: pp-fade-in 0.25s ease-out both; }
+
+/* Recharts tweaks */
+.recharts-cartesian-grid line { stroke: var(--chart-grid); }
+.recharts-text { fill: var(--muted-foreground); }
+.recharts-wrapper:focus, .recharts-surface:focus { outline: none; }
