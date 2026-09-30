@@ -72,7 +72,12 @@ If the key is missing or the call fails, the endpoint returns a rule-based answe
 
 ## Test access
 
-**Fastest (no accounts, no keys):**
+**One-click test (no local setup):**
+
+- [Open in GitHub Codespaces](https://codespaces.new/zubairkk2005-png/curly-octo-spork/tree/claude/profitpilot-mvp-042cr8) — installs and starts the app in demo mode; the browser opens automatically.
+- [Deploy to Vercel](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzubairkk2005-png%2Fcurly-octo-spork%2Ftree%2Fclaude%2Fprofitpilot-mvp-042cr8&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,OPENAI_API_KEY&envDescription=All%20optional%3A%20leave%20blank%20for%20Demo%20Mode) — you get a public URL; leave the variables blank for demo mode.
+
+**Local (no accounts, no keys):**
 ```bash
 npm install && npm run dev
 ```
